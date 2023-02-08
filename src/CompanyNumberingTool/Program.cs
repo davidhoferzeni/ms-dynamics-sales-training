@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Query;
@@ -16,7 +16,7 @@ IConfiguration config = new ConfigurationBuilder()
     .AddCommandLine(args)
     .Build();
 
-var connectionSettings = ConfigurationSectionBuilder<ConnectionConfigurationSection>.GetConfigurationSection(config, "ConnectionConfiguration");
+var connectionSettings = ConfigurationSectionBuilder<ConnectionConfiguration>.GetConfigurationSection(config, "ConnectionConfiguration");
 
 if (connectionSettings == null)
 {

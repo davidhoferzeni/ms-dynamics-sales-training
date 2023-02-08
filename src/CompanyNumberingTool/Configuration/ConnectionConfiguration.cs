@@ -1,4 +1,4 @@
-public sealed class ConnectionConfigurationSection : IConfigurationSection
+public sealed class ConnectionConfiguration : IConfigurationSection
 {
     public required string Url  { get; set; }
     public required string UserName  { get; set; }
