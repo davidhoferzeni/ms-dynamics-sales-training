@@ -5,3 +5,5 @@ bin
 *.debug.log
 .pdb
 .cache
+
+appsettings.json
