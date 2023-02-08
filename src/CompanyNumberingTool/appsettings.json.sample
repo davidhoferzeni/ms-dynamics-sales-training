@@ -1,0 +1,7 @@
+{
+    "ConnectionConfiguration": {
+        "Url": "https://orgXXXXXXX.crm4.dynamics.com/",
+        "UserName": "firstnameLastname@companyname.onmicrosoft.com",
+        "Password": "secretpassword123"
+    }
+}
