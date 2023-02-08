@@ -1,0 +1,7 @@
+.vs
+.svn
+obj
+bin
+*.debug.log
+.pdb
+.cache
