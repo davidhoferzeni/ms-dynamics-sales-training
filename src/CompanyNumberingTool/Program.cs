@@ -10,7 +10,7 @@ IConfiguration config = new ConfigurationBuilder()
     .Build();
 
 var connectionSettings = ConfigurationSectionBuilder<ConnectionConfiguration>.GetConfigurationSection(config, "ConnectionConfiguration");
-
+var startupConfiguration = ConfigurationSectionBuilder<StartupConfiguration>.GetConfigurationSection(config, "StartupConfiguration");
 if (connectionSettings == null)
 {
     throw new Exception("Settings are not available!");
@@ -21,7 +21,7 @@ Console.WriteLine($"Trying to connect to {connectionSettings.ConnectionString}")
 var dynamicsSession = new DynamicsSession(connectionSettings);
 var accountLogic = new AccountLogic(dynamicsSession);
 var accountEntities = accountLogic.GetAccountEntities();
-AccountLogic.Reindex(accountEntities);
+AccountLogic.Reindex(accountEntities, startupConfiguration?.InitialCompanyIndex ?? 1);
 ConsoleTable.From<AccountEntity>(accountEntities).Write();
 
 // Pause the console so it does not close.
