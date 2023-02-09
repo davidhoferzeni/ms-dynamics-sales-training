@@ -43,15 +43,23 @@ jobs:
     # Execute all unit tests in the solution
     #- name: Execute unit tests
     #  run: dotnet test
-    
-    # Execute all unit tests in the solution
+
     - name: Build project
       run: dotnet build $env:Project_Path --configuration $env:Configuration 
       env:
        Configuration: ${{ matrix.configuration }}
 
-    # Execute all unit tests in the solution
-    - name: Publish project
-      run: dotnet publish $env:Project_Path --configuration $env:Configuration 
+    - name: Publish project as Windows app
+      run: dotnet publish $env:Project_Path --configuration $env:Configuration /p:PublishSingleFile=true /p:DebugType=None -r win-x64 --sc true
+      env:
+       Configuration: ${{ matrix.configuration }}    
+
+    - name: Publish project as Linux app
+      run: dotnet publish $env:Project_Path --configuration $env:Configuration /p:PublishSingleFile=true /p:DebugType=None -r linux-x64 --sc true
+      env:
+       Configuration: ${{ matrix.configuration }}    
+
+    - name: Publish project as MacOS app
+      run: dotnet publish $env:Project_Path --configuration $env:Configuration /p:PublishSingleFile=true /p:DebugType=None -r osx-x64 --sc true
       env:
        Configuration: ${{ matrix.configuration }}    
