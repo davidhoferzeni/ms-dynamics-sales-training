@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/CompanyNumberingTool/bin/Debug/net7.0/CompanyNumberingTool.dll",
+            "program": "${workspaceFolder}/src/DynamicsAccountReindexingTool/bin/Debug/net7.0/DynamicsAccountReindexingTool.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/CompanyNumberingTool",
+            "cwd": "${workspaceFolder}/src/DynamicsAccountReindexingTool",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "externalTerminal",
             "stopAtEntry": false

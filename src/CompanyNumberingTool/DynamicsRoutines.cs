@@ -32,7 +32,7 @@ public class DynamicsRoutines
         var accountLogic = new AccountLogic(Session);
         ConsoleWriter.WriteInfo("Fetching accounts from database.");
         var accountEntities = accountLogic.GetAccountEntities();
-        AccountLogic.Reindex(accountEntities, _startupConfiguration.InitialCompanyIndex ?? 1);
+        AccountLogic.Reindex(accountEntities, _startupConfiguration.InitialAccountIndex ?? 1);
         ConsoleWriter.SetMessageColor(ConsoleColor.White, ConsoleColor.DarkGray);
         ConsoleTable.From<AccountEntity>(accountEntities).Write();
         ConsoleWriter.ResetMessageColor();
