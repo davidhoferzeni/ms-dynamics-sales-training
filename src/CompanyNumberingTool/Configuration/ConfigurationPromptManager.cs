@@ -26,7 +26,7 @@ public static class ConfigurationPromptManager
                 Type nonNullableType = Nullable.GetUnderlyingType(configurationKeyType) ?? configurationKeyType;
                 try {
                     newConfigurationValue = Convert.ChangeType(input, nonNullableType);
-                } catch (Exception ex) {
+                } catch (Exception) {
                     ConsoleWriter.WriteWarning("Incorrect value, please try again!");
                 }
                 // only support string and int for now

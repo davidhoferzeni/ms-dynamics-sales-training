@@ -36,7 +36,7 @@ public class AccountLogic
         var accountEntities = accountCollection?.Entities.Select(a => DynamicsEntityBuilder<AccountEntity>.Build(a))
         .ToList();
 
-        return accountEntities;
+        return accountEntities ?? new List<AccountEntity>();
     }
 
     public void UpdateAccountEntities(List<AccountEntity> entitiesToUpdate)
@@ -45,7 +45,7 @@ public class AccountLogic
         foreach (var dynamicsEntityToUpdate in dynamicsEntitiesToUpdate)
         {
             // is there honestly no bulk update?!
-            _session.ServiceClient.Update(dynamicsEntityToUpdate);
+            _session.ServiceClient?.Update(dynamicsEntityToUpdate);
         }
     }
 }

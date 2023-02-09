@@ -4,12 +4,12 @@ using Microsoft.Xrm.Sdk;
 
 public static class DynamicsEntityBuilder<T> where T : class, IDynamicsEntity, new()
 {
-    public static T? Build(Entity dynamicsEntity) {
+    public static T Build(Entity dynamicsEntity) {
         Type entityType = typeof(T);
         var newEntity = new T();
         var dynamicsGuidColumn = entityType.GetProperties().FirstOrDefault(prop => prop.IsDefined(typeof(DynamicsGuidAttribute),true));
         if (dynamicsGuidColumn == null) {
-            return null;
+            return newEntity;
         }
         dynamicsGuidColumn.SetValue(newEntity, dynamicsEntity.Id);
         var dynamicsColumns = entityType.GetProperties().Where(prop => prop.IsDefined(typeof(DynamicsColumnAttribute),false));
@@ -38,7 +38,11 @@ public static class DynamicsEntityBuilder<T> where T : class, IDynamicsEntity, n
         if (dynamicsGuidColumn == null) {
             return null;
         }
-        var newDynamicsEntity = new Entity(entityTableName, (Guid)dynamicsGuidColumn.GetValue(entity));
+        var entityGuid = dynamicsGuidColumn.GetValue(entity);
+        if (entityGuid == null) {
+            return null;
+        }
+        var newDynamicsEntity = new Entity(entityTableName, (Guid)entityGuid);
         var dynamicsColumns = entityType.GetProperties().Where(prop => prop.IsDefined(typeof(DynamicsColumnAttribute),false));
         foreach (var dynamicsColumn in dynamicsColumns)
         {
@@ -48,7 +52,11 @@ public static class DynamicsEntityBuilder<T> where T : class, IDynamicsEntity, n
             }
             var dynamicsColumnAttribute = dynamicsColumn.GetCustomAttribute<DynamicsColumnAttribute>();
             var dynamicsCoumnName = dynamicsColumnAttribute?.name;
-            newDynamicsEntity.Attributes.Add(new KeyValuePair<string, object>(dynamicsCoumnName, dynamicsColumn.GetValue(entity)));
+            var dynamicsColumnValue = dynamicsColumn.GetValue(entity);
+            if (dynamicsCoumnName == null || dynamicsColumnValue == null) {
+                continue;
+            }
+            newDynamicsEntity.Attributes.Add(new KeyValuePair<string, object>(dynamicsCoumnName, dynamicsColumnValue));
         }
         return newDynamicsEntity;
     }

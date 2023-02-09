@@ -13,7 +13,7 @@ public class DynamicsSession
 
     private ServiceClient? _serviceClient;
 
-    public ServiceClient ServiceClient
+    public ServiceClient? ServiceClient
     {
         get
         {
