@@ -9,7 +9,6 @@ on:
     branches: [ "master" ]
     paths:
       - 'src/DynamicsAccountReindexingTool/**'
-  workflow-dispatch
 
 jobs:
 
