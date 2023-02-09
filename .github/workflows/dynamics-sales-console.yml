@@ -3,8 +3,12 @@ name: CI dynamics-sales-test-console-app
 on:
   push:
     branches: [ "master" ]
+    paths:
+      - 'src/CompanyNumberingTool/**'
   pull_request:
     branches: [ "master" ]
+    paths:
+      - 'src/CompanyNumberingTool/**'
 
 jobs:
 
