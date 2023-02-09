@@ -30,14 +30,18 @@ public class DynamicsRoutines
 
     public void StartAccountReindexRoutine() {
         var accountLogic = new AccountLogic(Session);
+        ConsoleWriter.WriteInfo("Fetching accounts from database.");
         var accountEntities = accountLogic.GetAccountEntities();
         AccountLogic.Reindex(accountEntities, _startupConfiguration.InitialCompanyIndex ?? 1);
         ConsoleWriter.SetMessageColor(ConsoleColor.White, ConsoleColor.DarkGray);
         ConsoleTable.From<AccountEntity>(accountEntities).Write();
         ConsoleWriter.ResetMessageColor();
+        ConsoleWriter.WriteInfo("Do you want to update the index number for the presented accounts?");
         var confirmTransaction = ConsoleWriter.GiveConfirmPrompt();
         if (confirmTransaction) {
+            ConsoleWriter.WriteInfo("Updating accounts with new index number.");
             accountLogic.UpdateAccountEntities(accountEntities);
+            ConsoleWriter.WriteInfo($"Successfully updated {accountEntities.Count} accounts.");
         } else {
             ConsoleWriter.WriteError("Transaction was cancelled by user.");
         }
