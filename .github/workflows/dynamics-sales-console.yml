@@ -42,9 +42,9 @@ jobs:
     
     # Execute all unit tests in the solution
     - name: Build project
-      run: dotnet build $env: --configuration $env:Configuration 
+      run: dotnet build $env:Project_Path --configuration $env:Configuration 
     
     # Execute all unit tests in the solution
     - name: Build project
-      run: dotnet publish $env: --configuration $env:Configuration 
+      run: dotnet publish $env:Project_Path --configuration $env:Configuration 
     
