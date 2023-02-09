@@ -1,4 +1,4 @@
 public sealed class StartupConfiguration : IConfigurationSection
 {
-    public int? InitialCompanyIndex { get; set; }
+    public uint? InitialCompanyIndex { get; set; }
 }

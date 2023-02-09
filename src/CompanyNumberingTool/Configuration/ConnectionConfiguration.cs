@@ -1,8 +1,8 @@
 public sealed class ConnectionConfiguration : IConfigurationSection
 {
-    public required string Url  { get; set; }
-    public required string UserName  { get; set; }
-    public required string Password  { get; set; }
+    public string? Url  { get; set; }
+    public string? UserName  { get; set; }
+    public string? Password  { get; set; }
     public string AppId { get; set; } = "51f81489-12ee-4a9e-aaae-a2591f45987d";
     public string RedirectUri { get; set; } = "app://58145B91-0C36-4500-8554-080854F2AC97";
     //public LoginPromptMode LoginPrompt = LoginPromptMode.Auto;
