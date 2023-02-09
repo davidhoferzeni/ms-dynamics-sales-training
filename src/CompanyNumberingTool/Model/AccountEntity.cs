@@ -1,4 +1,4 @@
-
+[DynamicsTable("account")]
 public class AccountEntity : IDynamicsEntity
 {
     [DynamicsGuid]
@@ -7,9 +7,9 @@ public class AccountEntity : IDynamicsEntity
     public string? AccountName { get; set; }
     [DynamicsColumn("new_accountindex")]
     [DynamicsDataflow(DataflowType.Read)]
-    public uint? CurrentAccountIndex { get; set; }
+    public int? CurrentAccountIndex { get; set; }
     [DynamicsColumn("new_accountindex")]
     [DynamicsDataflow(DataflowType.Write)]
-    public uint? NewAccountIndex { get; set; }
+    public int? NewAccountIndex { get; set; }
 }
 

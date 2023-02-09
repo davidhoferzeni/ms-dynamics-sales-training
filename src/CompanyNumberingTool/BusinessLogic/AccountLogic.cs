@@ -20,7 +20,7 @@ public class AccountLogic
             {
                 continue;
             }
-            account.NewAccountIndex = (uint?)index + startIndex;
+            account.NewAccountIndex = (int?)((int?)index + startIndex);
         }
         return accountEntities;
     }
@@ -30,13 +30,23 @@ public class AccountLogic
         QueryExpression query = new QueryExpression()
         {
             EntityName = "account",
-            ColumnSet = new ColumnSet("name", "new_accountindex")
+            ColumnSet = new ColumnSet(new string[] { "name", "new_accountindex" })
         };
         var accountCollection = _session?.ServiceClient?.RetrieveMultiple(query);
         var accountEntities = accountCollection?.Entities.Select(a => DynamicsEntityBuilder<AccountEntity>.Build(a))
         .ToList();
 
         return accountEntities;
+    }
+
+    public void UpdateAccountEntities(List<AccountEntity> entitiesToUpdate)
+    {
+        var dynamicsEntitiesToUpdate = entitiesToUpdate.Select(e => DynamicsEntityBuilder<AccountEntity>.BuildDynamics(e));
+        foreach (var dynamicsEntityToUpdate in dynamicsEntitiesToUpdate)
+        {
+            // is there honestly no bulk update?!
+            _session.ServiceClient.Update(dynamicsEntityToUpdate);
+        }
     }
 }
 

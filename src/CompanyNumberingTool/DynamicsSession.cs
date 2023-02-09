@@ -13,7 +13,7 @@ public class DynamicsSession
 
     private ServiceClient? _serviceClient;
 
-    public ServiceClient? ServiceClient
+    public ServiceClient ServiceClient
     {
         get
         {
@@ -27,11 +27,13 @@ public class DynamicsSession
 
     public void Login()
     {
-        Console.WriteLine($"Trying to connect to {_configuration.ConnectionString}");
+        ConsoleWriter.WriteInfo($"Trying to connect to {_configuration.ConnectionString}");
         _serviceClient = new(_configuration.ConnectionString);
         if (!_serviceClient.IsReady)
         {
-            throw new Exception($"Login to {_configuration.ConnectionString} failed!");
+            var errorMessage = $"Login to {_configuration.ConnectionString} failed!";
+            ConsoleWriter.WriteError(errorMessage);
+            throw new Exception(errorMessage);
         }
     }
 }

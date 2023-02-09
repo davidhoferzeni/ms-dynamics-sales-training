@@ -21,13 +21,13 @@ public static class ConfigurationPromptManager
             var inputCounter = 0;
             while (newConfigurationValue == null && inputCounter < inputTimeout)
             {
-                Console.WriteLine($"Please enter a value for setting {configurationKey}:");
+                ConsoleWriter.WritePrompt($"Please enter a value for setting {configurationKey}:");
                 string? input = Console.ReadLine();
                 Type nonNullableType = Nullable.GetUnderlyingType(configurationKeyType) ?? configurationKeyType;
                 try {
                     newConfigurationValue = Convert.ChangeType(input, nonNullableType);
                 } catch (Exception ex) {
-                    Console.WriteLine("Incorrect value, please try again!");
+                    ConsoleWriter.WriteWarning("Incorrect value, please try again!");
                 }
                 // only support string and int for now
                 if (newConfigurationValue != null)
