@@ -43,8 +43,11 @@ jobs:
     # Execute all unit tests in the solution
     - name: Build project
       run: dotnet build $env:Project_Path --configuration $env:Configuration 
-    
+      env:
+       Configuration: ${{ matrix.configuration }}
+
     # Execute all unit tests in the solution
     - name: Build project
       run: dotnet publish $env:Project_Path --configuration $env:Configuration 
-    
+      env:
+       Configuration: ${{ matrix.configuration }}    
