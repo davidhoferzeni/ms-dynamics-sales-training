@@ -1,4 +1,4 @@
-name: [CI] dynamics-sales-test-console-app
+name: CI dynamics-sales-test-console-app
 
 on:
   push:
