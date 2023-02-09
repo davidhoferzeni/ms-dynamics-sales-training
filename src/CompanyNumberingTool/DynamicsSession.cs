@@ -27,7 +27,7 @@ public class DynamicsSession
 
     public void Login()
     {
-        ConsoleWriter.WriteInfo($"Trying to connect to {_configuration.ConnectionString}");
+        ConsoleWriter.WriteMessage($"Trying to connect to {_configuration.ConnectionString}");
         _serviceClient = new(_configuration.ConnectionString);
         if (!_serviceClient.IsReady)
         {

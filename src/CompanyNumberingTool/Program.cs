@@ -13,4 +13,4 @@ dynamiceRoutineLogic.StartAccountReindexRoutine();
 
 // Pause the console so it does not close.
 ConsoleWriter.WritePrompt("Press any key to exit.");
-Console.ReadKey(true);
+ConsoleWriter.ReadKey();

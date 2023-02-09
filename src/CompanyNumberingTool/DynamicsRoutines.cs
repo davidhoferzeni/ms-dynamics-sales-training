@@ -1,4 +1,5 @@
 
+using System.Threading.Tasks.Dataflow;
 using ConsoleTables;
 using Microsoft.Extensions.Configuration;
 using Microsoft.PowerPlatform.Dataverse.Client;
@@ -31,9 +32,14 @@ public class DynamicsRoutines
         var accountLogic = new AccountLogic(Session);
         var accountEntities = accountLogic.GetAccountEntities();
         AccountLogic.Reindex(accountEntities, _startupConfiguration.InitialCompanyIndex ?? 1);
-        ConsoleWriter.SetMessageColor(ConsoleColor.Magenta, ConsoleColor.DarkMagenta);
+        ConsoleWriter.SetMessageColor(ConsoleColor.White, ConsoleColor.DarkGray);
         ConsoleTable.From<AccountEntity>(accountEntities).Write();
         ConsoleWriter.ResetMessageColor();
-        accountLogic.UpdateAccountEntities(accountEntities);
+        var confirmTransaction = ConsoleWriter.GiveConfirmPrompt();
+        if (confirmTransaction) {
+            accountLogic.UpdateAccountEntities(accountEntities);
+        } else {
+            ConsoleWriter.WriteError("Transaction was cancelled by user.");
+        }
     }
 }

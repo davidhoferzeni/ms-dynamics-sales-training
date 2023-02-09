@@ -22,7 +22,7 @@ public static class ConfigurationPromptManager
             while (newConfigurationValue == null && inputCounter < inputTimeout)
             {
                 ConsoleWriter.WritePrompt($"Please enter a value for setting {configurationKey}:");
-                string? input = Console.ReadLine();
+                string? input = ConsoleWriter.ReadLine();
                 Type nonNullableType = Nullable.GetUnderlyingType(configurationKeyType) ?? configurationKeyType;
                 try {
                     newConfigurationValue = Convert.ChangeType(input, nonNullableType);
