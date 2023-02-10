@@ -27,10 +27,14 @@ public class DynamicsRoutines
 
     public DynamicsRoutines(IConfiguration config, IDynamicsToolLogger logger, IDynamicsToolInput inputManager)
     {
-        _connectionConfiguration = ConfigurationSectionBuilder<ConnectionConfiguration>.GetConfigurationSection(config, logger, inputManager, "ConnectionConfiguration");
-        _startupConfiguration = ConfigurationSectionBuilder<StartupConfiguration>.GetConfigurationSection(config, logger, inputManager, "StartupConfiguration");
+        var nonInteractiveMode = config.GetValue<bool?>("NonInteractive");
         _logger = logger;
         _inputManager = inputManager;
+        if (nonInteractiveMode.HasValue) {
+            _inputManager.SetInteractiveMode(!nonInteractiveMode.Value);
+        }
+        _startupConfiguration = ConfigurationSectionBuilder<StartupConfiguration>.GetConfigurationSection(config, logger, inputManager, "StartupConfiguration");
+        _connectionConfiguration = ConfigurationSectionBuilder<ConnectionConfiguration>.GetConfigurationSection(config, logger, inputManager, "ConnectionConfiguration");
     }
 
     public void StartAccountReindexRoutine()
@@ -42,7 +46,7 @@ public class DynamicsRoutines
         _logger.SetMessageFormat(LoggerFormatOptions.Info);
         ConsoleTable.From<AccountEntity>(accountEntities).Write();
         _logger.WriteMessage("Do you want to update the index number for the presented accounts?", LoggerFormatOptions.Prompt);
-        var confirmTransaction = _inputManager.GetConfirmationInput();
+        var confirmTransaction = _inputManager.GetConfirmationInput(true);
         if (confirmTransaction)
         {
             _logger.WriteMessage("Updating accounts with new index number.", LoggerFormatOptions.Info);

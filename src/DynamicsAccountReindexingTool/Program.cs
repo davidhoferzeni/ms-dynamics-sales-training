@@ -16,4 +16,4 @@ dynamiceRoutineLogic.StartAccountReindexRoutine();
 
 // Pause the console so it does not close.
 logger.WriteMessage("Press any key to exit.", LoggerFormatOptions.Prompt);
-inputManager.GetCharacterInput();
+inputManager.GetCharacterInput('n');
