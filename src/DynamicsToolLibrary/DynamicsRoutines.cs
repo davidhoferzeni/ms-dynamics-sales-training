@@ -8,42 +8,50 @@ public class DynamicsRoutines
 {
     private ConnectionConfiguration _connectionConfiguration;
     private StartupConfiguration _startupConfiguration;
+    private IDynamicsToolInput _inputManager;
+    private IDynamicsToolLogger _logger;
 
     private DynamicsSession? _session;
 
-    private DynamicsSession Session {
-       get
+    private DynamicsSession Session
+    {
+        get
         {
             if (_session == null)
             {
-                _session = new DynamicsSession(_connectionConfiguration);
+                _session = new DynamicsSession(_connectionConfiguration, _logger);
             }
             return _session;
         }
     }
 
-    public DynamicsRoutines(IConfiguration config)
+    public DynamicsRoutines(IConfiguration config, IDynamicsToolLogger logger, IDynamicsToolInput inputManager)
     {
-       _connectionConfiguration = ConfigurationSectionBuilder<ConnectionConfiguration>.GetConfigurationSection(config, "ConnectionConfiguration");
-       _startupConfiguration= ConfigurationSectionBuilder<StartupConfiguration>.GetConfigurationSection(config, "StartupConfiguration");
+        _connectionConfiguration = ConfigurationSectionBuilder<ConnectionConfiguration>.GetConfigurationSection(config, logger, inputManager, "ConnectionConfiguration");
+        _startupConfiguration = ConfigurationSectionBuilder<StartupConfiguration>.GetConfigurationSection(config, logger, inputManager, "StartupConfiguration");
+        _logger = logger;
+        _inputManager = inputManager;
     }
 
-    public void StartAccountReindexRoutine() {
+    public void StartAccountReindexRoutine()
+    {
         var accountLogic = new AccountLogic(Session);
-        ConsoleWriter.WriteInfo("Fetching accounts from database.");
+        _logger.WriteMessage("Fetching accounts from database.", LoggerFormatOptions.None);
         var accountEntities = accountLogic.GetAccountEntities();
         AccountLogic.Reindex(accountEntities, _startupConfiguration.InitialAccountIndex ?? 1);
-        ConsoleWriter.SetMessageColor(ConsoleColor.White, ConsoleColor.DarkGray);
+        _logger.SetMessageFormat(LoggerFormatOptions.Info);
         ConsoleTable.From<AccountEntity>(accountEntities).Write();
-        ConsoleWriter.ResetMessageColor();
-        ConsoleWriter.WriteInfo("Do you want to update the index number for the presented accounts?");
-        var confirmTransaction = ConsoleWriter.GiveConfirmPrompt();
-        if (confirmTransaction) {
-            ConsoleWriter.WriteInfo("Updating accounts with new index number.");
+        _logger.WriteMessage("Do you want to update the index number for the presented accounts?", LoggerFormatOptions.Prompt);
+        var confirmTransaction = _inputManager.GetConfirmationInput();
+        if (confirmTransaction)
+        {
+            _logger.WriteMessage("Updating accounts with new index number.", LoggerFormatOptions.Info);
             accountLogic.UpdateAccountEntities(accountEntities);
-            ConsoleWriter.WriteInfo($"Successfully updated {accountEntities.Count} accounts.");
-        } else {
-            ConsoleWriter.WriteError("Transaction was cancelled by user.");
+            _logger.WriteMessage($"Successfully updated {accountEntities.Count} accounts.", LoggerFormatOptions.Info);
+        }
+        else
+        {
+            _logger.WriteMessage("Transaction was cancelled by user.", LoggerFormatOptions.Error);
         }
     }
 }
