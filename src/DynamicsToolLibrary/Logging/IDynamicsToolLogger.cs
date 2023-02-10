@@ -1,5 +1,6 @@
-public interface IDynamicsToolLogger
+using Microsoft.Extensions.Logging;
+
+public interface IDynamicsToolLogger : ILogger
 {
-    void SetMessageFormat(LoggerFormatOptions formatOptions);
-    void WriteMessage(string message, LoggerFormatOptions formatOptions);
+    void SetMessageFormat(LogLevel logLevel);
 }

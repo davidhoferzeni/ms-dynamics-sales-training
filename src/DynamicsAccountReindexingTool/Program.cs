@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 IConfiguration config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
@@ -7,13 +8,12 @@ IConfiguration config = new ConfigurationBuilder()
     .Build();
 var logger = new ConsoleWriter();
 var inputManager = new ConsoleReader(logger);
-
-logger.WriteMessage("Welcome to the Dynamics Account Reindexing Tool!", LoggerFormatOptions.Info);
-logger.WriteMessage("This tool will present all current accounts of your Dynamics Sales platform to you and reindex them in alphabetical order.", LoggerFormatOptions.Info);
+logger.LogInformation("Welcome to the Dynamics Account Reindexing Tool!");
+logger.LogInformation("This tool will present all current accounts of your Dynamics Sales platform to you and reindex them in alphabetical order.");
 
 var dynamiceRoutineLogic = new DynamicsRoutines(config, logger, inputManager);
 dynamiceRoutineLogic.StartAccountReindexRoutine();
 
 // Pause the console so it does not close.
-logger.WriteMessage("Press any key to exit.", LoggerFormatOptions.Prompt);
+logger.LogCritical("Press any key to exit.");
 inputManager.GetCharacterInput('n');

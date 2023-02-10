@@ -1,6 +1,7 @@
 using System.Configuration;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 public static class ConfigurationPromptManager
 {
@@ -21,13 +22,13 @@ public static class ConfigurationPromptManager
             var inputCounter = 0;
             while (newConfigurationValue == null && inputCounter < inputTimeout)
             {
-                logger.WriteMessage($"Please enter a value for setting {configurationKey}:", LoggerFormatOptions.Prompt);
+                logger.LogCritical($"Please enter a value for setting {configurationKey}:");
                 string? input = inputManager.GetStringInput();
                 Type nonNullableType = Nullable.GetUnderlyingType(configurationKeyType) ?? configurationKeyType;
                 try {
                     newConfigurationValue = Convert.ChangeType(input, nonNullableType);
                 } catch (Exception) {
-                    logger.WriteMessage("Incorrect value, please try again!", LoggerFormatOptions.Error);
+                    logger.LogError("Incorrect value, please try again!");
                 }
                 // only support string and int for now
                 if (newConfigurationValue != null)

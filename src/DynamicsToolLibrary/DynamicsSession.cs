@@ -1,5 +1,5 @@
 
-
+using Microsoft.Extensions.Logging;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Query;
 
@@ -29,12 +29,12 @@ public class DynamicsSession
 
     public void Login()
     {
-        _logger.WriteMessage($"Trying to connect to {_configuration.ConnectionString}", LoggerFormatOptions.None);
+        _logger.Log(LogLevel.None, $"Trying to connect to {_configuration.ConnectionString}");
         _serviceClient = new(_configuration.ConnectionString);
         if (!_serviceClient.IsReady)
         {
             var errorMessage = $"Login to {_configuration.ConnectionString} failed!";
-            _logger.WriteMessage(errorMessage, LoggerFormatOptions.Error);
+            _logger.LogError(errorMessage);
             throw new Exception(errorMessage);
         }
     }

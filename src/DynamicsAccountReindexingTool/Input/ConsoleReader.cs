@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Logging;
+
 public class ConsoleReader : IDynamicsToolInput
 {
     public ConsoleReader(IDynamicsToolLogger logger) {
@@ -12,7 +14,7 @@ public class ConsoleReader : IDynamicsToolInput
            return;
         }
          var errorMessage = "Interactive mode is active but no default input was provided!";
-        _logger.WriteMessage(errorMessage, LoggerFormatOptions.Error);
+        _logger.LogError(errorMessage);
         throw new Exception(errorMessage);
     }
 
@@ -34,7 +36,7 @@ public class ConsoleReader : IDynamicsToolInput
         }
         bool confirmed;
         ConsoleKey response;
-        _logger.WriteMessage("Please confirm [y/n] ", LoggerFormatOptions.Prompt);
+        _logger.LogCritical("Please confirm [y/n] ");
         var isValidInput = false;
         do
         {
@@ -44,7 +46,7 @@ public class ConsoleReader : IDynamicsToolInput
             isValidInput = response == ConsoleKey.Y || response == ConsoleKey.N;
             if (!isValidInput)
             {
-                _logger.WriteMessage("No valid entry, please try again!", LoggerFormatOptions.Warning);
+                _logger.LogWarning("No valid entry, please try again!");
             }
             confirmed = response == ConsoleKey.Y;
         } while (!isValidInput);

@@ -1,42 +1,61 @@
+using Microsoft.Extensions.Logging;
+
 public class ConsoleWriter : IDynamicsToolLogger
 {
     private static object _MessageLock = new object();
 
-    public void SetMessageFormat(LoggerFormatOptions formatOptions)
+    public void SetMessageFormat(LogLevel logLevel)
     {
-        switch (formatOptions)
+        switch (logLevel)
         {
-            case LoggerFormatOptions.Info:
+            case LogLevel.Information:
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.BackgroundColor = ConsoleColor.DarkGray;
                 break;
-            case LoggerFormatOptions.Prompt:
+            case LogLevel.Critical:
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.BackgroundColor = ConsoleColor.DarkCyan;
                 break;
-            case LoggerFormatOptions.Warning:
+            case LogLevel.Warning:
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.BackgroundColor = ConsoleColor.DarkYellow;
                 break;
-            case LoggerFormatOptions.Error:
+            case LogLevel.Error:
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.BackgroundColor = ConsoleColor.DarkRed;
                 break;
-            case LoggerFormatOptions.Custom:
-            case LoggerFormatOptions.None:
+            case LogLevel.None:
             default:
                 Console.ResetColor();
                 break;
         }
     }
 
-    public void WriteMessage(string message, LoggerFormatOptions formatOptions)
+    public void WriteMessage(string message, LogLevel logLevel)
     {
         lock (_MessageLock)
         {
-            SetMessageFormat(formatOptions);
+            SetMessageFormat(logLevel);
             Console.WriteLine(message);
             Console.ResetColor();
         }
+    }
+
+    public IDisposable? BeginScope<TState>(TState state) where TState : notnull => default!;
+
+    public bool IsEnabled(LogLevel logLevel) => true;
+
+    public void Log<TState>(
+        LogLevel logLevel,
+        EventId eventId,
+        TState state,
+        Exception? exception,
+        Func<TState, Exception?, string> formatter)
+    {
+        if (!IsEnabled(logLevel))
+        {
+            return;
+        }
+        WriteMessage(state?.ToString() ?? string.Empty, logLevel);
     }
 }

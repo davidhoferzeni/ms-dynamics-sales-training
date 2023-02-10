@@ -2,6 +2,7 @@
 using System.Threading.Tasks.Dataflow;
 using ConsoleTables;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.PowerPlatform.Dataverse.Client;
 
 public class DynamicsRoutines
@@ -40,26 +41,26 @@ public class DynamicsRoutines
     public void StartAccountReindexRoutine()
     {
         var accountLogic = new AccountLogic(Session);
-        _logger.WriteMessage("Fetching accounts from database.", LoggerFormatOptions.None);
+        _logger.Log(LogLevel.None, "Fetching accounts from database.");
         var accountEntities = accountLogic.GetList();
         if (accountEntities == null) {
-            _logger.WriteMessage("No accounts found!", LoggerFormatOptions.Error);
+            _logger.LogError("No accounts found!");
             return;
         }
         AccountLogic.Reindex(accountEntities, _startupConfiguration.InitialAccountIndex ?? 1);
-        _logger.SetMessageFormat(LoggerFormatOptions.Info);
+        _logger.SetMessageFormat(LogLevel.Information);
         ConsoleTable.From<AccountEntity>(accountEntities).Write();
-        _logger.WriteMessage("Do you want to update the index number for the presented accounts?", LoggerFormatOptions.Prompt);
+        _logger.LogCritical("Do you want to update the index number for the presented accounts?");
         var confirmTransaction = _inputManager.GetConfirmationInput(true);
         if (confirmTransaction)
         {
-            _logger.WriteMessage("Updating accounts with new index number.", LoggerFormatOptions.Info);
+            _logger.LogInformation("Updating accounts with new index number.");
             accountLogic.Update(accountEntities);
-            _logger.WriteMessage($"Successfully updated {accountEntities.Count} accounts.", LoggerFormatOptions.Info);
+            _logger.LogInformation($"Successfully updated {accountEntities.Count} accounts.");
         }
         else
         {
-            _logger.WriteMessage("Transaction was cancelled by user.", LoggerFormatOptions.Error);
+            _logger.LogError("Transaction was cancelled by user.");
         }
     }
 }
