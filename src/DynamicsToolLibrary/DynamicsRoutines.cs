@@ -41,7 +41,11 @@ public class DynamicsRoutines
     {
         var accountLogic = new AccountLogic(Session);
         _logger.WriteMessage("Fetching accounts from database.", LoggerFormatOptions.None);
-        var accountEntities = accountLogic.GetAccountEntities();
+        var accountEntities = accountLogic.GetList();
+        if (accountEntities == null) {
+            _logger.WriteMessage("No accounts found!", LoggerFormatOptions.Error);
+            return;
+        }
         AccountLogic.Reindex(accountEntities, _startupConfiguration.InitialAccountIndex ?? 1);
         _logger.SetMessageFormat(LoggerFormatOptions.Info);
         ConsoleTable.From<AccountEntity>(accountEntities).Write();
@@ -50,7 +54,7 @@ public class DynamicsRoutines
         if (confirmTransaction)
         {
             _logger.WriteMessage("Updating accounts with new index number.", LoggerFormatOptions.Info);
-            accountLogic.UpdateAccountEntities(accountEntities);
+            accountLogic.Update(accountEntities);
             _logger.WriteMessage($"Successfully updated {accountEntities.Count} accounts.", LoggerFormatOptions.Info);
         }
         else
