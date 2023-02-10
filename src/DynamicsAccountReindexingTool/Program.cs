@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
-using ConsoleTables;
 
-// See https://aka.ms/new-console-template for more information
+ConsoleWriter.WriteInfo("Welcome to the Dynamics Account Reindexing Tool!");
+ConsoleWriter.WriteInfo("This tool will present all current accounts of your Dynamics Sales platform to you and reindex them in alphabetical order.");
+
 IConfiguration config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
     .AddEnvironmentVariables()
