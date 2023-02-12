@@ -1,8 +1,8 @@
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 IConfiguration config = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json")
+    .AddJsonFile("appsettings.json", true)
     .AddEnvironmentVariables()
     .AddCommandLine(args)
     .Build();
