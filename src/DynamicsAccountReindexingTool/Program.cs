@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 IConfiguration config = new ConfigurationBuilder()
@@ -15,5 +15,5 @@ var dynamiceRoutineLogic = new DynamicsRoutines(config, logger, inputManager);
 dynamiceRoutineLogic.StartAccountReindexRoutine();
 
 // Pause the console so it does not close.
-logger.LogCritical("Press any key to exit.");
+logger.LogInformation("Press any key to exit.");
 inputManager.GetCharacterInput('n');

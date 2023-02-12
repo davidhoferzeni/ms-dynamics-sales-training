@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
 
-public class ConsoleWriter : IDynamicsToolLogger
+public class ConsoleWriter : ILogger
 {
     private static object _MessageLock = new object();
 

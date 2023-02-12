@@ -5,13 +5,13 @@ using Microsoft.Xrm.Sdk.Query;
 
 public class DynamicsSession
 {
-    public DynamicsSession(ConnectionConfiguration configuration, IDynamicsToolLogger logger, bool autologin = false)
+    public DynamicsSession(ConnectionConfiguration configuration, ILogger logger, bool autologin = false)
     {
         _configuration = configuration;
         _logger = logger;
     }
     private ConnectionConfiguration _configuration;
-    private IDynamicsToolLogger _logger;
+    private ILogger _logger;
 
     private ServiceClient? _serviceClient;
 

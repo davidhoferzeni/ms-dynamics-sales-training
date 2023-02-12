@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 public static class ConfigurationPromptManager
 {
-    public static void FillConfigurationSection(IConfigurationSection configurationSection, IDynamicsToolLogger logger, IDynamicsToolInput inputManager)
+    public static void FillConfigurationSection(IConfigurationSection configurationSection, ILogger logger, IDynamicsToolInput inputManager)
     {
         var configurationProperties = configurationSection.GetType().GetProperties();
         foreach (var configurationProperty in configurationProperties)
@@ -22,12 +22,15 @@ public static class ConfigurationPromptManager
             var inputCounter = 0;
             while (newConfigurationValue == null && inputCounter < inputTimeout)
             {
-                logger.LogCritical($"Please enter a value for setting {configurationKey}:");
+                logger.LogInformation($"Please enter a value for setting {configurationKey}:");
                 string? input = inputManager.GetStringInput();
                 Type nonNullableType = Nullable.GetUnderlyingType(configurationKeyType) ?? configurationKeyType;
-                try {
+                try
+                {
                     newConfigurationValue = Convert.ChangeType(input, nonNullableType);
-                } catch (Exception) {
+                }
+                catch (Exception)
+                {
                     logger.LogError("Incorrect value, please try again!");
                 }
                 // only support string and int for now

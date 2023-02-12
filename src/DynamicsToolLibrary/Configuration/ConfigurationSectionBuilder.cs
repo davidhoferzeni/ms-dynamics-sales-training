@@ -3,8 +3,10 @@ using Microsoft.Extensions.Logging;
 
 public static class ConfigurationSectionBuilder<T> where T : class, IConfigurationSection, new()
 {
-    public static T GetConfigurationSection(IConfiguration configuration, IDynamicsToolLogger logger, IDynamicsToolInput inputManager, string sectionName) {
-        if(string.IsNullOrEmpty(sectionName)) {
+    public static T GetConfigurationSection(IConfiguration configuration, ILogger logger, IDynamicsToolInput inputManager, string sectionName)
+    {
+        if (string.IsNullOrEmpty(sectionName))
+        {
             var errorMessage = "No section name avialable!";
             logger.LogError(errorMessage);
             throw new Exception(errorMessage);

@@ -10,7 +10,7 @@ public class DynamicsRoutines
     private ConnectionConfiguration _connectionConfiguration;
     private StartupConfiguration _startupConfiguration;
     private IDynamicsToolInput _inputManager;
-    private IDynamicsToolLogger _logger;
+    private ILogger _logger;
 
     private DynamicsSession? _session;
 
@@ -26,12 +26,13 @@ public class DynamicsRoutines
         }
     }
 
-    public DynamicsRoutines(IConfiguration config, IDynamicsToolLogger logger, IDynamicsToolInput inputManager)
+    public DynamicsRoutines(IConfiguration config, ILogger logger, IDynamicsToolInput inputManager)
     {
         var nonInteractiveMode = config.GetValue<bool?>("NonInteractive");
         _logger = logger;
         _inputManager = inputManager;
-        if (nonInteractiveMode.HasValue) {
+        if (nonInteractiveMode.HasValue)
+        {
             _inputManager.SetInteractiveMode(!nonInteractiveMode.Value);
         }
         _startupConfiguration = ConfigurationSectionBuilder<StartupConfiguration>.GetConfigurationSection(config, logger, inputManager, "StartupConfiguration");
@@ -43,14 +44,15 @@ public class DynamicsRoutines
         var accountLogic = new AccountLogic(Session);
         _logger.Log(LogLevel.None, "Fetching accounts from database.");
         var accountEntities = accountLogic.GetList();
-        if (accountEntities == null) {
+        if (accountEntities == null)
+        {
             _logger.LogError("No accounts found!");
             return;
         }
         AccountLogic.Reindex(accountEntities, _startupConfiguration.InitialAccountIndex ?? 1);
-        _logger.SetMessageFormat(LogLevel.Information);
-        ConsoleTable.From<AccountEntity>(accountEntities).Write();
-        _logger.LogCritical("Do you want to update the index number for the presented accounts?");
+        var tableOutput = ConsoleTable.From<AccountEntity>(accountEntities).ToString();
+        _logger.LogInformation(tableOutput);
+        _logger.LogInformation("Do you want to update the index number for the presented accounts?");
         var confirmTransaction = _inputManager.GetConfirmationInput(true);
         if (confirmTransaction)
         {
