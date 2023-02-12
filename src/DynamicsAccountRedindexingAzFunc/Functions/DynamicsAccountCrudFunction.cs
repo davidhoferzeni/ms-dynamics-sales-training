@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -6,8 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 
-namespace Company.Function
-{
 public class DynamicsAccountCrudFunction
 {
     private readonly ILogger _logger;
@@ -16,19 +15,20 @@ public class DynamicsAccountCrudFunction
     public DynamicsAccountCrudFunction(ILoggerFactory loggerFactory, IConfiguration configuration)
     {
         _logger = loggerFactory.CreateLogger<DynamicsAccountCrudFunction>();
-         var connectionConfiguration = ConfigurationSectionBuilder<ConnectionConfiguration>.GetConfigurationSection(configuration, _logger, new DynamicsNoninteractiveManager(_logger), "ConnectionConfiguration");
+        var connectionConfiguration = ConfigurationSectionBuilder<ConnectionConfiguration>.GetConfigurationSection(configuration, _logger, new DynamicsNoninteractiveManager(_logger), "ConnectionConfiguration");
         var session = new DynamicsSession(connectionConfiguration, _logger);
         _accountLogic = new DynamicsCrudLogic<AccountEntity>(session);
     }
 
     [Function("DynamicsAccountCrudFunction")]
-    public ObjectResult Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req)
+    public HttpResponseData Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "accounts/")] HttpRequestData req)
     {
-        _logger.LogInformation("C# HTTP trigger function processed a request.");
-        
+        _logger.LogInformation("message logged");
         var accountList = _accountLogic.GetList();
-        return new OkObjectResult(accountList);
+        
+        var response = req.CreateResponse(HttpStatusCode.OK);
+        response.Headers.Add("Content-Type", "application/json");
+        response.WriteString(JsonSerializer.Serialize(accountList));
+        return response;
     }
-}
-
 }
