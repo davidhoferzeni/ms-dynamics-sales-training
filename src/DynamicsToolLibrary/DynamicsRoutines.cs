@@ -35,8 +35,8 @@ public class DynamicsRoutines
         {
             _inputManager.SetInteractiveMode(!nonInteractiveMode.Value);
         }
-        _startupConfiguration = ConfigurationSectionBuilder<StartupConfiguration>.GetConfigurationSection(config, logger, inputManager, "StartupConfiguration");
         _connectionConfiguration = ConfigurationSectionBuilder<ConnectionConfiguration>.GetConfigurationSection(config, logger, inputManager, "ConnectionConfiguration");
+        _startupConfiguration = ConfigurationSectionBuilder<StartupConfiguration>.GetConfigurationSection(config, logger, inputManager, "StartupConfiguration");
     }
 
     public void StartAccountReindexRoutine()
