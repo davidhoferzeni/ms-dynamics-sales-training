@@ -36,6 +36,74 @@
                 "${workspaceFolder}/src/DynamicsAccountReindexingTool/DynamicsAccountReindexingTool.csproj"
             ],
             "problemMatcher": "$msCompile"
-        }
+        },
+        {
+			"label": "clean (functions)",
+			"command": "dotnet",
+			"args": [
+				"clean",
+                "${workspaceFolder}/src/DynamicsAccountRedindexingAzFunc/DynamicsAccountRedindexingAzFunc.csproj",
+				"/property:GenerateFullPaths=true",
+				"/consoleloggerparameters:NoSummary"
+			],
+			"type": "process",
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "build (functions)",
+			"command": "dotnet",
+			"args": [
+				"build",
+                "${workspaceFolder}/src/DynamicsAccountRedindexingAzFunc/DynamicsAccountRedindexingAzFunc.csproj",
+				"/property:GenerateFullPaths=true",
+				"/consoleloggerparameters:NoSummary"
+			],
+			"type": "process",
+			"dependsOn": "clean (functions)",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "clean release (functions)",
+			"command": "dotnet",
+			"args": [
+				"clean",
+                "${workspaceFolder}/src/DynamicsAccountRedindexingAzFunc/DynamicsAccountRedindexingAzFunc.csproj",
+				"--configuration",
+				"Release",
+				"/property:GenerateFullPaths=true",
+				"/consoleloggerparameters:NoSummary"
+			],
+			"type": "process",
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "publish (functions)",
+			"command": "dotnet",
+			"args": [
+				"publish",
+                "${workspaceFolder}/src/DynamicsAccountRedindexingAzFunc/DynamicsAccountRedindexingAzFunc.csproj",
+				"--configuration",
+				"Release",
+				"/property:GenerateFullPaths=true",
+				"/consoleloggerparameters:NoSummary"
+			],
+			"type": "process",
+			"dependsOn": "clean release (functions)",
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"type": "func",
+			"dependsOn": "build (functions)",
+			"options": {
+				"cwd": "${workspaceFolder}/src/DynamicsAccountRedindexingAzFunc/bin/Debug/net7.0"
+			},
+			"command": "host start",
+			"isBackground": true,
+			"problemMatcher": "$func-dotnet-watch"
+		}
     ]
 }
