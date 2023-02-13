@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 [DynamicsTable("account")]
 public class AccountEntity : IDynamicsEntity
 {
@@ -10,6 +12,7 @@ public class AccountEntity : IDynamicsEntity
     public int? CurrentAccountIndex { get; set; }
     [DynamicsColumn("new_accountindex")]
     [DynamicsDataflow(DataflowType.Write)]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public int? NewAccountIndex { get; set; }
 }
 
