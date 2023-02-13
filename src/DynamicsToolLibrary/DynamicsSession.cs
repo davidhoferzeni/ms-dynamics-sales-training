@@ -5,7 +5,7 @@ using Microsoft.Xrm.Sdk.Query;
 
 public class DynamicsSession
 {
-    public DynamicsSession(ConnectionConfiguration configuration, ILogger logger, bool autologin = false)
+    public DynamicsSession(ConnectionConfiguration configuration, ILogger logger)
     {
         _configuration = configuration;
         _logger = logger;
