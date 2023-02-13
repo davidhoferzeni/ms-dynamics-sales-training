@@ -6,10 +6,12 @@ using Microsoft.Extensions.Logging;
 public class DynamicsAccountReindexFunction
 {
     private readonly ILogger _logger;
+    private readonly DynamicsRoutines _dynamicsRoutines;
 
     public DynamicsAccountReindexFunction(ILoggerFactory loggerFactory, IConfiguration configuration)
     {
         _logger = loggerFactory.CreateLogger<DynamicsAccountReindexFunction>();
+        _dynamicsRoutines = new DynamicsRoutines(configuration, _logger);
     }
 
     [Function("ReindexAccountsFunction")]
@@ -21,6 +23,6 @@ public class DynamicsAccountReindexFunction
     )
     {
         timerInfo.LogStatus(_logger);
-        
+        _dynamicsRoutines.StartAccountReindexRoutine();
     }
 }

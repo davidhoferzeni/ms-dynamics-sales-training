@@ -9,13 +9,13 @@ using Microsoft.Extensions.Logging;
 
 public class PostAccountFunction
 {
-    private readonly ILogger _logger;
-    private readonly DynamicsCrudLogic<AccountEntity> _accountLogic;
+    private readonly ILogger _logger;    
+    private readonly DynamicsRoutines _dynamicsRoutines;
 
     public PostAccountFunction(ILoggerFactory loggerFactory, IConfiguration configuration)
     {
         _logger = loggerFactory.CreateLogger<PostAccountFunction>();
-        _accountLogic = AzureFunctionHelper.GetEntityLogic<AccountEntity>(_logger, configuration);
+        _dynamicsRoutines = new DynamicsRoutines(configuration, _logger);
     }
 
     [Function("PostAccountFunction")]
@@ -31,7 +31,8 @@ public class PostAccountFunction
             var errorMessage = "Request object not valid!";
             return AzureFunctionHelper.GetHttpResponseObject(req, HttpStatusCode.BadRequest, errorMessage);
         }
-        _accountLogic.Create(new [] {accountToSave});
+        var accountLogic = _dynamicsRoutines.GetAccountLogic();
+        accountLogic.Create(new [] {accountToSave});
         return AzureFunctionHelper.GetHttpResponseObject(req, HttpStatusCode.OK);
     }
 }

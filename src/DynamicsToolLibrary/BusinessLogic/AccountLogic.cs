@@ -1,8 +1,6 @@
-using Microsoft.Xrm.Sdk.Query;
-
-public class AccountLogic : DynamicsCrudLogic<AccountEntity>
+public class AccountHelper
 {
-    public AccountLogic(DynamicsSession session) : base(session) { }
+    public AccountHelper() { }
 
     public static List<AccountEntity> Reindex(List<AccountEntity> accountEntities, uint startIndex = 1)
     {

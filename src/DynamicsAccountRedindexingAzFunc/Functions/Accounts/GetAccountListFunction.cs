@@ -10,18 +10,19 @@ using Microsoft.Extensions.Logging;
 public class GetAccountListFunction
 {
     private readonly ILogger _logger;
-    private readonly DynamicsCrudLogic<AccountEntity> _accountLogic;
+    private readonly DynamicsRoutines _dynamicsRoutines;
 
     public GetAccountListFunction(ILoggerFactory loggerFactory, IConfiguration configuration)
     {
         _logger = loggerFactory.CreateLogger<GetAccountListFunction>();
-        _accountLogic = AzureFunctionHelper.GetEntityLogic<AccountEntity>(_logger, configuration);
+        _dynamicsRoutines = new DynamicsRoutines(configuration, _logger);
     }
 
     [Function("GetAccountListFunction")]
     public HttpResponseData Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "companies")] HttpRequestData req)
     {
-        var accountList = _accountLogic.GetList();
+        var accountLogic = _dynamicsRoutines.GetAccountLogic();     
+        var accountList = accountLogic.GetList();
         return AzureFunctionHelper.GetHttpResponseObject(req, HttpStatusCode.OK, accountList);
     }
 }

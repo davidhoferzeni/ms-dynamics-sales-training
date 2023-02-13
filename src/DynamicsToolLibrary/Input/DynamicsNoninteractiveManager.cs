@@ -26,16 +26,19 @@ public class DynamicsNoninteractiveManager : IDynamicsToolInput
 
     public bool GetConfirmationInput(bool? defaultValue = null)
     {
-        throw new NotImplementedException();
+        ValidateInteractiveMode(defaultValue);
+        return defaultValue!.Value;
     }
 
     public char GetCharacterInput(char? defaultValue = null)
     {
-        throw new NotImplementedException();
+        ValidateInteractiveMode(defaultValue);
+        return defaultValue!.Value;
     }
 
     public string GetStringInput(string? defaultValue = null)
     {
-        throw new NotImplementedException();
+        ValidateInteractiveMode(defaultValue);
+        return defaultValue!;
     }
 }

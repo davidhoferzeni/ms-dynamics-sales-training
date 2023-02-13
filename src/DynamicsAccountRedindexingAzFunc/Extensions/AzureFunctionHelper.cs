@@ -16,11 +16,4 @@ public static class AzureFunctionHelper
         }
         return response;
     }
-
-    public static DynamicsCrudLogic<TEntity> GetEntityLogic<TEntity>(ILogger logger, IConfiguration config) where TEntity : class, new() {
-        var inputManager = new DynamicsNoninteractiveManager(logger);
-        var connectionConfiguration = ConfigurationSectionBuilder<ConnectionConfiguration>.GetConfigurationSection(config, logger, inputManager, "ConnectionConfiguration");
-        var session = new DynamicsSession(connectionConfiguration, logger);
-        return new DynamicsCrudLogic<TEntity>(session);
-    }
 }

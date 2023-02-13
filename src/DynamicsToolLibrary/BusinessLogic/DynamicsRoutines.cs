@@ -26,22 +26,22 @@ public class DynamicsRoutines
         }
     }
 
-    public DynamicsRoutines(IConfiguration config, ILogger logger, IDynamicsToolInput inputManager)
+    public DynamicsRoutines(IConfiguration config, ILogger logger, IDynamicsToolInput? inputManager = null)
     {
         var nonInteractiveMode = config.GetValue<bool?>("NonInteractive");
         _logger = logger;
-        _inputManager = inputManager;
+        _inputManager = inputManager ?? new DynamicsNoninteractiveManager(_logger);
         if (nonInteractiveMode.HasValue)
         {
             _inputManager.SetInteractiveMode(!nonInteractiveMode.Value);
         }
-        _connectionConfiguration = ConfigurationSectionBuilder<ConnectionConfiguration>.GetConfigurationSection(config, logger, inputManager, "ConnectionConfiguration");
-        _startupConfiguration = ConfigurationSectionBuilder<StartupConfiguration>.GetConfigurationSection(config, logger, inputManager, "StartupConfiguration");
+        _connectionConfiguration = ConfigurationSectionBuilder<ConnectionConfiguration>.GetConfigurationSection(config, logger, _inputManager, "ConnectionConfiguration");
+        _startupConfiguration = ConfigurationSectionBuilder<StartupConfiguration>.GetConfigurationSection(config, logger, _inputManager, "StartupConfiguration");
     }
 
     public void StartAccountReindexRoutine()
     {
-        var accountLogic = new AccountLogic(Session);
+        var accountLogic = new DynamicsCrudLogic<AccountEntity>(Session);
         _logger.Log(LogLevel.None, "Fetching accounts from database.");
         var accountEntities = accountLogic.GetList();
         if (accountEntities == null)
@@ -49,7 +49,7 @@ public class DynamicsRoutines
             _logger.LogError("No accounts found!");
             return;
         }
-        AccountLogic.Reindex(accountEntities, _startupConfiguration.InitialAccountIndex ?? 1);
+        AccountHelper.Reindex(accountEntities, _startupConfiguration.InitialAccountIndex ?? 1);
         var tableOutput = ConsoleTable.From<AccountEntity>(accountEntities).ToString();
         _logger.LogInformation(tableOutput);
         _logger.LogInformation("Do you want to update the index number for the presented accounts?");
@@ -64,5 +64,9 @@ public class DynamicsRoutines
         {
             _logger.LogError("Transaction was cancelled by user.");
         }
+    }
+
+    public DynamicsCrudLogic<AccountEntity> GetAccountLogic() {
+        return new DynamicsCrudLogic<AccountEntity>(Session);
     }
 }
