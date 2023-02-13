@@ -42,13 +42,21 @@ public class DynamicsCrudLogic<TEntity> where TEntity : class, new()
 
     public TEntity? GetById(Guid id)
     {
-        var query = BuildListQuery();
         var dynamicsEntity = _session?.ServiceClient?.Retrieve(TableName, id, ColumnQuerySet);
         if(dynamicsEntity == null) {
             return null;
         }
         var entity = Build(dynamicsEntity);
         return entity;
+    }
+
+    public List<TEntity>? GetByProperty(string queryProperty, object queryValue) {
+        var query = BuildListQuery();
+        query.Criteria = new FilterExpression();   
+        query.Criteria.AddCondition(queryProperty, ConditionOperator.Equal, queryValue);   
+        var entityCollection = _session?.ServiceClient?.RetrieveMultiple(query);
+        var entityList = entityCollection?.Entities.Select(Build);
+        return entityList?.ToList();
     }
 
     public void Update(IEnumerable<TEntity> entitiesToSave)
@@ -60,6 +68,17 @@ public class DynamicsCrudLogic<TEntity> where TEntity : class, new()
             _session.ServiceClient?.Update(dynamicsEntityToSave);
         }
     }
+
+    public void Create(IEnumerable<TEntity> entitiesToCreate)
+    {
+        var dynamicsEntitiesToCreate = entitiesToCreate.Select(BuildDynamics);
+        foreach (var dynamicsEntityToCreate in dynamicsEntitiesToCreate)
+        {
+            // is there honestly no bulk update?!
+            _session.ServiceClient?.Create(dynamicsEntityToCreate);
+        }
+    }
+
 
     public void Delete(IEnumerable<TEntity> entitiesToDelete)
     {
