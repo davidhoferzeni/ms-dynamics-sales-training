@@ -11,7 +11,7 @@ public static class ConfigurationPromptManager
         foreach (var configurationProperty in configurationProperties)
         {
             var configurationValue = configurationProperty.GetValue(configurationSection);
-            if (configurationValue != null)
+            if (configurationValue != null || !configurationSection.IsPropertyRequired(configurationProperty.Name))
             {
                 continue;
             }
