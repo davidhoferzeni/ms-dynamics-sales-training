@@ -166,16 +166,19 @@ public class DynamicsCrudLogic<TEntity> where TEntity : class, new()
             EntityName = TableName,
             ColumnSet = ColumnQuerySet
         };
+        SetOrderQuery(query);
         return query;
     }
 
-    private void SetTableQuery(QueryExpression query)
+    private void SetOrderQuery(QueryExpression query)
     {
-        var entityTableName = _entityType.GetCustomAttribute<DynamicsTableAttribute>()?.name;
-        if (entityTableName == null)
+        // currently only first found column will be used
+        var orderProperty = _entityType.GetProperties().FirstOrDefault(prop => prop.IsDefined(typeof(DynamicsOrderAttribute), true));
+        var orderColumnName = orderProperty?.GetCustomAttribute<DynamicsColumnAttribute>();
+        if (orderColumnName?.name == null)
         {
             return;
         }
-        query.EntityName = entityTableName;
+        query.AddOrder(orderColumnName?.name, OrderType.Ascending);
     }
 }

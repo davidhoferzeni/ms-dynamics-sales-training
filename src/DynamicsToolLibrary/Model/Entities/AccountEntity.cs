@@ -7,6 +7,7 @@ public class AccountEntity : IDynamicsEntity
     public Guid AccountId { get; set; }
     
     [DynamicsColumn("name")]
+    [DynamicsOrder]
     public string? AccountName { get; set; }
     
     [DynamicsColumn("new_accountindex")]

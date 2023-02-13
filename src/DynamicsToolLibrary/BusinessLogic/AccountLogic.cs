@@ -6,8 +6,7 @@ public class AccountLogic : DynamicsCrudLogic<AccountEntity>
 
     public static List<AccountEntity> Reindex(List<AccountEntity> accountEntities, uint startIndex = 1)
     {
-        var orderedAccountEntities = accountEntities.OrderBy(a => a.AccountName).ToList();
-        foreach (var (account, index) in orderedAccountEntities.Select((a, i) => (a, i)))
+        foreach (var (account, index) in accountEntities.Select((a, i) => (a, i)))
         {
             if (account == null)
             {
@@ -15,7 +14,7 @@ public class AccountLogic : DynamicsCrudLogic<AccountEntity>
             }
             account.NewAccountIndex = (int?)((int?)index + startIndex);
         }
-        return orderedAccountEntities;
+        return accountEntities;
     }
 }
 
