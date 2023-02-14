@@ -1,6 +1,7 @@
 name: CI dynamics-sales-test-console-app
 
 on:
+  workflow_call:
   push:
     branches: [ "master" ]
     paths:
