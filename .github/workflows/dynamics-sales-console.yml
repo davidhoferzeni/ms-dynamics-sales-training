@@ -4,11 +4,11 @@ on:
   push:
     branches: [ "master" ]
     paths:
-      - 'src/DynamicsAccountReindexingTool/**'
+      - 'src/DynamicsToolConsole/**'
   pull_request:
     branches: [ "master" ]
     paths:
-      - 'src/DynamicsAccountReindexingTool/**'
+      - 'src/DynamicsToolConsole/**'
 
 jobs:
 
@@ -18,11 +18,11 @@ jobs:
       matrix:
         configuration: [Debug, Release]
 
-    runs-on: windows-latest  # For a list of available runner types, refer to
+    runs-on: ubuntu-latest  # For a list of available runner types, refer to
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
     env:
-      Project_Path: ./src/DynamicsAccountReindexingTool/DynamicsAccountReindexingTool.csproj                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
+      Project_Path: ./src/DynamicsToolConsole/DynamicsToolConsole.csproj                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
 
     steps:
     - name: Checkout
@@ -36,10 +36,6 @@ jobs:
       with:
         dotnet-version: 6.0.x
 
-    # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v1.0.2
-
     # Execute all unit tests in the solution
     #- name: Execute unit tests
     #  run: dotnet test
@@ -49,17 +45,17 @@ jobs:
       env:
        Configuration: ${{ matrix.configuration }}
 
-    - name: Publish project as Windows app
-      run: dotnet publish $env:Project_Path --configuration $env:Configuration /p:PublishSingleFile=true /p:DebugType=None -r win-x64 --sc true
-      env:
-       Configuration: ${{ matrix.configuration }}    
+    # - name: Publish project as Windows app
+    #   run: dotnet publish $env:Project_Path --configuration $env:Configuration /p:PublishSingleFile=true /p:DebugType=None -r win-x64 --sc true
+    #   env:
+    #    Configuration: ${{ matrix.configuration }}    
 
-    - name: Publish project as Linux app
-      run: dotnet publish $env:Project_Path --configuration $env:Configuration /p:PublishSingleFile=true /p:DebugType=None -r linux-x64 --sc true
-      env:
-       Configuration: ${{ matrix.configuration }}    
+    # - name: Publish project as Linux app
+    #   run: dotnet publish $env:Project_Path --configuration $env:Configuration /p:PublishSingleFile=true /p:DebugType=None -r linux-x64 --sc true
+    #   env:
+    #    Configuration: ${{ matrix.configuration }}    
 
-    - name: Publish project as MacOS app
-      run: dotnet publish $env:Project_Path --configuration $env:Configuration /p:PublishSingleFile=true /p:DebugType=None -r osx-x64 --sc true
-      env:
-       Configuration: ${{ matrix.configuration }}    
+    # - name: Publish project as MacOS app
+    #   run: dotnet publish $env:Project_Path --configuration $env:Configuration /p:PublishSingleFile=true /p:DebugType=None -r osx-x64 --sc true
+    #   env:
+    #    Configuration: ${{ matrix.configuration }}    
