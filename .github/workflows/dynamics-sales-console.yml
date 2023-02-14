@@ -48,7 +48,7 @@ jobs:
     #  run: dotnet test
 
     - name: Build project
-      run: dotnet build $env:Project_Path --configuration $env:Configuration 
+      run: dotnet build $Project_Path --configuration $Configuration 
       env:
        Configuration: ${{ matrix.configuration }}
 
