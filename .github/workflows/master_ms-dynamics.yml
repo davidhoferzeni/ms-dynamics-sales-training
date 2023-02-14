@@ -39,4 +39,4 @@ jobs:
           app-name: 'ms-dynamics'
           slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8D9EA2A28D2D427E988B832C7E299251 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D22DB69A69AB490B92263E7FDF8AA0C7 }}
