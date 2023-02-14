@@ -15,9 +15,9 @@ public class DynamicsAccountReindexFunction
     }
 
     [Function("ReindexAccountsFunction")]
-    public void Run([TimerTrigger("0 * * * * *", 
+    public void Run([TimerTrigger("0 * * * * *" 
 #if DEBUG
-    RunOnStartup = true
+    , RunOnStartup = true
 #endif
     )] TimerInfo timerInfo
     )
