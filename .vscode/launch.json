@@ -5,20 +5,20 @@
             // Use IntelliSense to find out which attributes exist for C# debugging
             // Use hover for the description of the existing attributes
             // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
-            "name": ".NET Core Launch (Account Reindexing Tool)",
+            "name": ".NET Core Launch (Console)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/DynamicsAccountReindexingTool/bin/Debug/net7.0/DynamicsAccountReindexingTool.dll",
+            "program": "${workspaceFolder}/src/DynamicsToolConsole/bin/Debug/net7.0/DynamicsToolConsole.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/DynamicsAccountReindexingTool",
+            "cwd": "${workspaceFolder}/src/DynamicsToolConsole",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "externalTerminal",
             "stopAtEntry": false
         },
         {
-            "name": ".NET Core Az Functions",
+            "name": ".NET Core Launch (AzFunc)",
             "type": "coreclr",
             "request": "attach",
             "processId": "${command:azureFunctions.pickProcess}"
