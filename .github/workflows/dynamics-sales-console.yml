@@ -2,6 +2,12 @@ name: CI dynamics-sales-test-console-app
 
 on:
   workflow_call:
+    inputs:
+      username:
+        description: 'A username passed from the caller workflow'
+        default: 'john-doe'
+        required: false
+        type: string
   push:
     branches: [ "master" ]
     paths:
