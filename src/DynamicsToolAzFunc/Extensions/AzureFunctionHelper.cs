@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 public static class AzureFunctionHelper
 {
     public static HttpResponseData GetHttpResponseObject(HttpRequestData req, HttpStatusCode statusCode = HttpStatusCode.NoContent, object? resultObject = null) {
-        var response = req.CreateResponse(HttpStatusCode.OK);
+        var response = req.CreateResponse(statusCode);
         if (resultObject != null) {
             response.Headers.Add("Content-Type", "application/json");
             response.WriteString(JsonSerializer.Serialize(resultObject));

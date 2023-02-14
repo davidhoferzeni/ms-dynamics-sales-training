@@ -25,6 +25,6 @@ public class DeleteAccountByNumberFunction
             return AzureFunctionHelper.GetHttpResponseObject(req, HttpStatusCode.NotFound);
         }
         accountLogic.Delete(accountToDelete);
-        return AzureFunctionHelper.GetHttpResponseObject(req, HttpStatusCode.NoContent);
+        return AzureFunctionHelper.GetHttpResponseObject(req);
     }
 }
